@@ -1,8 +1,9 @@
 #summary One-sentence summary of this page.
+#labels Featured
 
-= Introduction =
+= オリジナルRedmineプラグイン =
 
-Add your content here.
+ * [CodeReviewsPlugin]
 
 
 = Details =
