@@ -1,0 +1,6 @@
+#summary One-sentence summary of this page.
+
+= コードレビュープラグイン =
+
+Redmineのリポジトリブラウザの差分表示画面にコメントを書き込めるようにするプラグイン。
+
