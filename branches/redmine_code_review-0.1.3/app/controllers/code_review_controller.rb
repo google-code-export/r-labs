@@ -90,9 +90,9 @@ class CodeReviewController < ApplicationController
       render :partial => 'show'
     else
       @review = @review.root
-      path = @review.change.path
+      path = @review.path
       path = '/' + path unless path.match(/^\//)
-      redirect_to url_for(:controller => 'repositories', :action => 'diff', :id => @project) + path + '?rev=' + @review.change.changeset.revision + '&review_id=' + @review.id.to_s
+      redirect_to url_for(:controller => 'repositories', :action => 'diff', :id => @project) + path + '?rev=' + @review.revision + '&review_id=' + @review.id.to_s
 
     end
   end
