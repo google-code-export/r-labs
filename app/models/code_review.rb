@@ -21,7 +21,7 @@ class CodeReview < ActiveRecord::Base
   unloadable
   belongs_to :project
   belongs_to :user
-  belongs_to :change
+  #belongs_to :change
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
   acts_as_tree
 
@@ -66,7 +66,6 @@ class CodeReview < ActiveRecord::Base
   end
   
   def committer
-    changeset = change.changeset
     return changeset.author if changeset.respond_to?('author')
 
     # For development mode. I don't know why "changeset.respond_to?('author')"
@@ -75,5 +74,23 @@ class CodeReview < ActiveRecord::Base
       return User.find(changeset.user_id)
     end
     changeset.committer.to_s.split('<').first
+  end
+
+  def path
+    change.path
+  end
+
+  def revision
+    changeset.revision
+  end
+
+  private
+
+  def change
+    @change ||= Change.find(change_id)
+  end
+
+  def changeset
+    @changeset ||= Changeset.find(change.changeset_id)
   end
 end
