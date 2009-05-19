@@ -66,22 +66,32 @@ class CodeReview < ActiveRecord::Base
   end
   
   def committer
-    return changeset.author if changeset.respond_to?('author')
+    begin
+      return changeset.author if changeset.respond_to?('author')
 
-    # For development mode. I don't know why "changeset.respond_to?('author')"
-    # is false in development mode.
-    if changeset.user_id
-      return User.find(changeset.user_id)
+      # For development mode. I don't know why "changeset.respond_to?('author')"
+      # is false in development mode.
+      if changeset.user_id
+        return User.find(changeset.user_id)
+      end
+      changeset.committer.to_s.split('<').first
+    rescue
     end
-    changeset.committer.to_s.split('<').first
   end
 
   def path
-    change.path
+    begin
+      change.path
+    rescue => ex
+      return ex.to_s
+    end
   end
 
   def revision
-    changeset.revision
+    begin
+      changeset.revision
+    rescue
+    end
   end
 
   private
