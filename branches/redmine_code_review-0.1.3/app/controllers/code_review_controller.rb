@@ -75,9 +75,14 @@ class CodeReviewController < ApplicationController
     @rev = params[:rev] unless params[:rev].blank?
     @path = params[:path]
     changeset = Changeset.find_by_revision(@rev, :conditions => ['repository_id = (?)',@project.repository.id])
+    repository = @project.repository
+    url = repository.url
+    root_url = repository.root_url
+    rootpath = url[root_url.length, url.length - root_url.length]
+    fullpath = (rootpath + '/' + @path).gsub(/[\/]+/, '/')
     @change = nil
     changeset.changes.each{|chg|
-      @change = chg if ((chg.path == @path) or ('/' + chg.path == @path))
+      @change = chg if ((chg.path == fullpath) or ('/' + chg.path == fullpath))
     }
     unless @change
       @changeset = changeset

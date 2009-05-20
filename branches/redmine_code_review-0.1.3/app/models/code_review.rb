@@ -81,7 +81,16 @@ class CodeReview < ActiveRecord::Base
 
   def path
     begin
-      change.path
+      return @path if @path
+      repository = changeset.repository
+      url = repository.url
+      root_url = repository.root_url
+      rootpath = url[root_url.length, url.length - root_url.length]
+      if rootpath == '/'
+        @path = change.path
+      else
+        @path = change.path[rootpath.length, change.path.length - rootpath.length]
+      end      
     rescue => ex
       return ex.to_s
     end
@@ -102,5 +111,9 @@ class CodeReview < ActiveRecord::Base
 
   def changeset
     @changeset ||= Changeset.find(change.changeset_id)
+  end
+
+  def repository
+    @repository ||= changeset.repository
   end
 end
