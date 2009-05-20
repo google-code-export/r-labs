@@ -85,8 +85,12 @@ class CodeReview < ActiveRecord::Base
       repository = changeset.repository
       url = repository.url
       root_url = repository.root_url
+      if (url == nil || root_url == nil)
+        @path = change.path
+        return @path
+      end
       rootpath = url[root_url.length, url.length - root_url.length]
-      if rootpath == '/'
+      if rootpath == '/' || rootpath.blank?
         @path = change.path
       else
         @path = change.path[rootpath.length, change.path.length - rootpath.length]

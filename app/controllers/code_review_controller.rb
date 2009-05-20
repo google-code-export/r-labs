@@ -78,8 +78,16 @@ class CodeReviewController < ApplicationController
     repository = @project.repository
     url = repository.url
     root_url = repository.root_url
-    rootpath = url[root_url.length, url.length - root_url.length]
-    fullpath = (rootpath + '/' + @path).gsub(/[\/]+/, '/')
+    if (url == nil || root_url == nil)
+        fullpath = @path
+    else
+        rootpath = url[root_url.length, url.length - root_url.length]
+        if rootpath.blank?
+            fullpath = @path
+        else
+            fullpath = (rootpath + '/' + @path).gsub(/[\/]+/, '/')
+        end
+    end
     @change = nil
     changeset.changes.each{|chg|
       @change = chg if ((chg.path == fullpath) or ('/' + chg.path == fullpath))
