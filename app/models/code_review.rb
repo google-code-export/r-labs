@@ -21,7 +21,7 @@ class CodeReview < ActiveRecord::Base
   unloadable
   belongs_to :project
   belongs_to :user
-  belongs_to :change
+  #belongs_to :change
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_id'
   acts_as_tree
 
@@ -33,19 +33,17 @@ class CodeReview < ActiveRecord::Base
 
   acts_as_event :title => Proc.new {|o|
                        title = "#{l(:code_review)}: #{'#' + o.root.id.to_s}"
-                       title += ": #{l(:label_reply_plural)}" if o.parent and o.status_changed_from == nil
-                       title += "(#{l(:label_review_closed)})" if o.status_changed_to == STATUS_CLOSED
-                       title += "(#{l(:label_review_open)})" if o.status_changed_to == STATUS_OPEN
+                       title += ": #{l(:label_reply_plural)}" if o.parent
                        title
                   },
                   :description => Proc.new {|o| "#{o.comment}"},
-                  :datetime => :created_at,
-                  :author => :user,
+                  :datetime => :updated_at,
+                  :author => :updated_by,
                   :type => 'code_review',
                   :url => Proc.new {|o| {:controller => 'code_review', :action => 'show', :id => o.project, :review_id => o.id} }
 
   acts_as_activity_provider :type => 'code_review',
-                              :timestamp => "#{CodeReview.table_name}.created_at",
+                              :timestamp => "#{CodeReview.table_name}.updated_at",
                               :author_key => "#{CodeReview.table_name}.user_id",
                               :permission => :view_code_review,
                               :find_options => {:joins => "LEFT JOIN #{Project.table_name} ON #{Project.table_name}.id = #{CodeReview.table_name}.project_id"}
@@ -68,22 +66,58 @@ class CodeReview < ActiveRecord::Base
   end
   
   def committer
-    changeset = change.changeset
-    return changeset.author if changeset.respond_to?('author')
+    begin
+      return changeset.author if changeset.respond_to?('author')
 
-    # For development mode. I don't know why "changeset.respond_to?('author')"
-    # is false in development mode.
-    if changeset.user_id
-      return User.find(changeset.user_id)
+      # For development mode. I don't know why "changeset.respond_to?('author')"
+      # is false in development mode.
+      if changeset.user_id
+        return User.find(changeset.user_id)
+      end
+      changeset.committer.to_s.split('<').first
+    rescue
     end
-    changeset.committer.to_s.split('<').first
   end
 
-  def lastchild
-    return self if children.length == 0
-    list = self.descendants.sort{|a, b|
-      a.created_at <=> b.created_at
-    }
-    list.pop
+  def path
+    begin
+      return @path if @path
+      repository = changeset.repository
+      url = repository.url
+      root_url = repository.root_url
+      if (url == nil || root_url == nil)
+        @path = change.path
+        return @path
+      end
+      rootpath = url[root_url.length, url.length - root_url.length]
+      if rootpath == '/' || rootpath.blank?
+        @path = change.path
+      else
+        @path = change.path[rootpath.length, change.path.length - rootpath.length]
+      end      
+    rescue => ex
+      return ex.to_s
+    end
+  end
+
+  def revision
+    begin
+      changeset.revision
+    rescue
+    end
+  end
+
+  private
+
+  def change
+    @change ||= Change.find(change_id)
+  end
+
+  def changeset
+    @changeset ||= Changeset.find(change.changeset_id)
+  end
+
+  def repository
+    @repository ||= changeset.repository
   end
 end
