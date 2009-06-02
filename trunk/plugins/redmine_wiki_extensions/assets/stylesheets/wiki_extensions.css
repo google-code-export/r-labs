@@ -6,3 +6,7 @@
 .wiki_extensions_fnlist{
     font-size:10px;
 }
+
+.wiki_extensions_fnlist ul {
+list-style-type: none;
+}

@@ -48,7 +48,7 @@ module WikiExtensionsFootnote
       cnt = 0
       data[:footnotes].each {|fn|
         cnt += 1
-        o << '<li><a name="wiki_extensins_fn_' + "#{cnt}" + '" href="#wiki_extensins_fn_src_' + "#{cnt}" + '"' + ">#{fn['word']}</a>:#{fn['description']}</li>"
+        o << '<li>'+ "[#{cnt}] " +'<a name="wiki_extensins_fn_' + "#{cnt}" + '" href="#wiki_extensins_fn_src_' + "#{cnt}" + '"' + ">#{fn['word']}</a>:#{fn['description']}</li>"
       }
       o << '</ul>'
       o << '</div>'
