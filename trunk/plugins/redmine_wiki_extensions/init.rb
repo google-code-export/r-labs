@@ -1,5 +1,7 @@
 require 'redmine'
 require 'wiki_extensions_application_hooks'
+require 'wiki_extensions_wiki_page_patch'
+require 'wiki_extensions_footnote'
 
 Redmine::Plugin.register :redmine_wiki_extensions do
   name 'Redmine Wiki Extensions plugin'
@@ -7,14 +9,6 @@ Redmine::Plugin.register :redmine_wiki_extensions do
   description 'This is a plugin for Redmine'
   version '0.0.1'
 
-  Redmine::WikiFormatting::Macros.register do
-    desc "This is my macro"
-    macro :my_macro do |obj, args|
-      o = "My macro output"
-      args.each{ |arg|  o << arg}
-      o << ','
-      o << obj.page.title
-      o
-    end
-  end
+  
 end
+

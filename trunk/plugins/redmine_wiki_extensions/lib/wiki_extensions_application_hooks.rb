@@ -28,6 +28,8 @@ class WikiExtensionsApplicationHooks < Redmine::Hook::ViewListener
     
     o = ""
     o << javascript_include_tag(baseurl + "/plugin_assets/redmine_wiki_extensions/javascripts/wiki_extensions.js")
+    o << "\n"
+    o << stylesheet_link_tag(baseurl + "/plugin_assets/redmine_wiki_extensions/stylesheets/wiki_extensions.css")
      
     return o
   end
@@ -50,7 +52,7 @@ class WikiExtensionsApplicationHooks < Redmine::Hook::ViewListener
       o << javascript_tag('add_wiki_extension_sidebar();')
 
     end
-    
+
     return o
   end
 end
