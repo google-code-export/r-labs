@@ -9,7 +9,8 @@ class WikiExtensionsController < ApplicationController
     comment.user_id = @user.id
     comment.comment = params[:comment]
     comment.save
-    redirect_to :controller => 'wiki', :action => 'index', :id => @project
+    page = WikiPage.find(comment.wiki_page_id)
+    redirect_to :controller => 'wiki', :action => 'index', :id => @project, :page => page.title
   end
 
   private
