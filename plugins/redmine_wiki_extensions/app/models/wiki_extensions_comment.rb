@@ -14,23 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-require 'redmine'
-require 'wiki_extensions_application_hooks'
-require 'wiki_extensions_wiki_page_patch'
-require 'wiki_extensions_footnote'
-require 'wiki_extensions_comments'
-
-Redmine::Plugin.register :redmine_wiki_extensions do
-  name 'Redmine Wiki Extensions plugin'
-  author 'Haruyuki Iida'
-  description 'This is a plugin for Redmine'
-  version '0.0.1'
-
-  project_module :wiki_extensions do
-    permission :add_wiki_comment, {:wiki_extensions => [:add_comment]}
-    permission :show_wiki_comment, {:wiki_extensions => [:show_comments]}, :public => true
-    #menu :project_menu, :wiki_extensions, { :controller => 'wiki_extensions', :action => 'add_comment' }, :caption => 'Wiki Extensions', :param => :id
-  end
-  
+class WikiExtensionsComment < ActiveRecord::Base
+  belongs_to :user
+  validates_presence_of :comment, :wiki_page_id, :user_id
 end
-
