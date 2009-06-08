@@ -19,6 +19,7 @@ require 'wiki_extensions_application_hooks'
 require 'wiki_extensions_wiki_page_patch'
 require 'wiki_extensions_footnote'
 require 'wiki_extensions_comments'
+require 'wiki_extensions_wiki_macro'
 
 Redmine::Plugin.register :redmine_wiki_extensions do
   name 'Redmine Wiki Extensions plugin'
