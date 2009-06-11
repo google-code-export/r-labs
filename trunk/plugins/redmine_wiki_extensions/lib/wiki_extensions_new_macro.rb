@@ -32,7 +32,7 @@ module WikiExtensionsWikiMacro
       if (today - date < expire)
         o << '<span class="wiki_ext_new_mark">new'
         case today - date
-        when 0
+        when -100 .. 0
           o << '!!!'
         when 1
           o << '!!'
