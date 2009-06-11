@@ -29,6 +29,7 @@ module WikiExtensionsWikiMacro
         alias_name = page_name
       end
       project = Project.find_by_name(project_name)
+      project = Project.find_by_identifier(project_name) unless project
       return nil unless project
       wiki = Wiki.find_by_project_id(project.id)
       return nil unless wiki
