@@ -38,12 +38,18 @@ end
 module InstanceMethodsForWikiExtensionWikiController
   def render(args = {})
     if (args[:action] == 'show')
+      wiki_extensions_add_fnlist
       wiki_extensions_include_sidebar
     end
     super args
   end
 
   private
+
+  def wiki_extensions_add_fnlist
+    text = @content.text
+    text << "\n{{fnlist}}\n"
+  end
 
   def wiki_extensions_include_sidebar
     return if @page.title == 'SideBar'
