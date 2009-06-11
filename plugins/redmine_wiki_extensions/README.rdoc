@@ -1,3 +1,0 @@
-= wiki_extensions
-
-Description goes here
