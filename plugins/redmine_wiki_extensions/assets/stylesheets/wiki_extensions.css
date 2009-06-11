@@ -13,3 +13,12 @@
 list-style-type: none;
 list-style-image: none;
 }
+
+.wiki_ext_new_date {
+    font-weight: bold;
+}
+
+.wiki_ext_new_mark {
+    font-style: italic;
+    color: #ff0000;
+}
