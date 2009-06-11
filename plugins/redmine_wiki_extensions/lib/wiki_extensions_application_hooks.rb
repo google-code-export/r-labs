@@ -46,9 +46,6 @@ class WikiExtensionsApplicationHooks < Redmine::Hook::ViewListener
     o = ''
     
     if @side_bar
-      o << '<div id="wiki_extentions_sidebar" style="display:none;"><p>'
-      o << textilizable(@side_bar, :text)
-      o << "</p></div>\n"
       o << javascript_tag('add_wiki_extension_sidebar();')
 
     end

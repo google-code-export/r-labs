@@ -21,12 +21,13 @@ require 'wiki_extensions_footnote'
 require 'wiki_extensions_comments'
 require 'wiki_extensions_wiki_macro'
 require 'wiki_extensions_project_macro'
+require 'wiki_extensions_wiki_controller_patch'
 
 Redmine::Plugin.register :redmine_wiki_extensions do
   name 'Redmine Wiki Extensions plugin'
   author 'Haruyuki Iida'
   description 'This is a plugin for Redmine'
-  version '0.0.1'
+  version '0.0.2'
 
   project_module :wiki_extensions do
     permission :add_wiki_comment, {:wiki_extensions => [:add_comment]}
