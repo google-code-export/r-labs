@@ -23,11 +23,12 @@ module WikiExtensionsProjectMacro
       return nil if args.length < 1
       project_name = args[0].strip
       project = Project.find_by_name(project_name)
+      project = Project.find_by_identifier(project_name) unless project
       return nil unless project
       if (args[1])
         alias_name = args[1].strip
       else
-        alias_name = project_name
+        alias_name = project.name
       end
 
       o = ""
