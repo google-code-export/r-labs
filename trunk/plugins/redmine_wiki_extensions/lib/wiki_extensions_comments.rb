@@ -18,7 +18,7 @@ require 'redmine'
 
 module WikiExtensionsComments
   Redmine::WikiFormatting::Macros.register do
-    desc "This is Add Comment macro"
+    desc "Displays a comment form."
     macro :comment_form do |obj, args|
       return unless @project
       unless User.current.allowed_to?({:controller => 'wiki_extensions', :action => 'add_comment'}, @project)
@@ -47,7 +47,7 @@ module WikiExtensionsComments
   end
 
   Redmine::WikiFormatting::Macros.register do
-    desc "This is comments macro"
+    desc "Display comments of the page."
     macro :comments do |obj, args|
       unless User.current.allowed_to?({:controller => 'wiki_extensions', :action => 'show_comments'}, @project)
         return ''

@@ -18,7 +18,8 @@ require 'redmine'
 
 module WikiExtensionsFootnote
   Redmine::WikiFormatting::Macros.register do
-    desc "This is Footnote macro"
+    desc "Create a footnote.\n\n" +
+      " \{{fn(word, description}}"
     macro :fn do |obj, args|
       return nil if args.length < 2
       word = args[0]
@@ -38,7 +39,7 @@ module WikiExtensionsFootnote
   end
 
   Redmine::WikiFormatting::Macros.register do
-    desc "This is Footnote list macro"
+    desc "Displays footnotes of the page."
     macro :fnlist do |obj, args|
       page = obj.page
       data = page.wiki_extension_data

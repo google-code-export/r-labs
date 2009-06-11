@@ -18,7 +18,11 @@ require 'redmine'
 
 module WikiExtensionsProjectMacro
   Redmine::WikiFormatting::Macros.register do
-    desc "This is project macro."
+    desc "Creates link to other project.\n\n" +
+      " \{{project(project_name)}}\n" +
+      " \{{project(project_identifire}}\n" +
+      " \{{project(project_name, alias)}}\n" +
+      " \{{project(project_identifire, alias}}\n"
     macro :project do |obj, args|
       return nil if args.length < 1
       project_name = args[0].strip
