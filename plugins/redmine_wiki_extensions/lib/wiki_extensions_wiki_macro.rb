@@ -23,6 +23,11 @@ module WikiExtensionsWikiMacro
       return nil if args.length < 2
       project_name = args[0].strip
       page_name = args[1].strip
+      if (args[2])
+        alias_name = args[2].strip
+      else
+        alias_name = page_name
+      end
       project = Project.find_by_name(project_name)
       return nil unless project
       wiki = Wiki.find_by_project_id(project.id)
@@ -31,7 +36,7 @@ module WikiExtensionsWikiMacro
       return nil unless page
 
       o = ""
-      o << link_to(page_name, :controller => 'wiki', :action => 'index', :id => project, :page => page_name)
+      o << link_to(alias_name, :controller => 'wiki', :action => 'index', :id => project, :page => page_name)
       return o
     end
   end
