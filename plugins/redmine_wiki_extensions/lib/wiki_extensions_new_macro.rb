@@ -18,7 +18,10 @@ require 'redmine'
 
 module WikiExtensionsWikiMacro
   Redmine::WikiFormatting::Macros.register do
-    desc "This is new macro"
+    desc "Displays a string 'new'.\n\n" +
+      "  @{{new(yyyy-mm-dd)}}@\n" +
+      "  @{{new(yyyy-mm-dd, expire)}}@\n\n" +
+      "Default of expire is 5."
     macro :new do |obj, args|
       return nil if args.length < 1
       date_string = args[0].strip
