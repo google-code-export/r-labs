@@ -1,0 +1,64 @@
+<%
+# Code Review plugin for Redmine
+# Copyright (C) 2009  Haruyuki Iida
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-%>
+<p class="author">
+
+        <%= authoring reply.created_at, reply.user %>.
+       </p>
+<% if reply.status_changed_from != nil and  reply.status_changed_from != reply.status_changed_to%>
+
+<p class="author">
+ 
+</p>
+<%
+  if (reply.status_changed_from == CodeReview::STATUS_CLOSED)
+    status_from = l(:label_review_closed)
+  else
+    status_from = l(:label_review_open)
+  end
+
+  if (reply.status_changed_to == CodeReview::STATUS_CLOSED)
+    status_to = l(:label_review_closed)
+  else
+    status_to = l(:label_review_open)
+  end
+  begin
+    message = l(:text_journal_changed, :old => status_from, :new => status_to)
+  rescue
+    # for rails 2.1.2
+    message = l(:text_journal_changed, status_from, status_to)
+  end
+%>
+<ul>
+  <li>
+    <strong><%=h l(:field_status) %></strong>
+<%=h message %>
+  </li>
+</ul>
+<% end %>
+
+ <%= l(:label_updated_time, distance_of_time_in_words(Time.now, reply.updated_at)) + '.' if reply.created_at != reply.updated_at %>
+
+<div class="wiki">
+          <%= avatar(reply.user, :size => "32") %><%= textilizable reply, :comment %>
+  </div>
+
+<%= render :partial => 'reply', :collection => reply.children.sort{|a, b| a.id <=> b.id} %>
+
+
+<hr/>
