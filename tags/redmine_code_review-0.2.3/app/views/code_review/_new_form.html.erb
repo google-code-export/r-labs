@@ -1,0 +1,68 @@
+<%
+# Code Review plugin for Redmine
+# Copyright (C) 2009  Haruyuki Iida
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-%>
+
+  <div class="code-review-form-title drag-handle" id="add-review-title">
+  <table border="0" width="100%">
+    <tr>
+      <td><span class="icon icon-review"><%= l(:label_add_review) %></span></td>
+      <td align="right">
+        <%= link_to_function image_tag('close.png'), "$('review-form-frame').hide();" %>
+      </td>
+    </tr>
+  </table>
+  </div>
+
+<div class="box">
+  <h2>
+  <%= l(:label_line_number, @review.line) %>
+</h2>
+<% form_for :review, @review,
+  :url => {:controller => 'code_review', :action => 'new', :id=>@project} do |f|  %>
+<%= error_messages_for 'review' %>
+<%= error_messages_for 'issue' %>
+<%= f.hidden_field(:change_id) %>
+<%= f.hidden_field(:line) %>
+<%= hidden_field_tag(:action_type, @review.action_type) %>
+<%= hidden_field_tag(:rev, @review.revision) %>
+<%= hidden_field_tag(:rev_to, @review.rev_to) %>
+<%= hidden_field_tag(:path, @review.path) %>
+  <p>
+    <label><b><%=h l(:field_subject)%>:</b></label>
+    <%= f.text_field :subject, :size => 70, :required => true %>
+  </p>
+<p>
+  <%= f.text_area :comment,
+                   :cols => 30,
+                   :rows => 10,
+                   :accesskey => accesskey(:edit),
+                   :class => 'wiki-edit' %>
+ 
+</p>
+<p>
+      <%= submit_to_remote 'apply', l(:button_apply), :update => 'review-form',
+        :url => {:controller => 'code_review', :action => 'new', :id=>@project, :line => @line}, :method => :post, :change_id => @review.change_id, 220 => "$('review-form-frame').hide();" %>
+
+      <input type="button" value="<%=h l(:button_cancel) %> " onclick="$('review-form-frame').hide();"/>
+</p>
+ <%= wikitoolbar_for 'review_comment' %>
+<% end %>
+
+</div>
+
+
